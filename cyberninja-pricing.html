@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Pricing | Cyberninja Innovations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #13131c;
+    --card-border: #1e1e2e;
+    --accent: #f5a623;
+    --accent2: #c8860a;
+    --orange: #f5a623;
+    --gold: #f5a623;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --green: #00c896;
+    --popular: #f5a623;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(245,166,35,0.05) 0%, rgba(200,134,10,0.03) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 72px 0 48px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,166,35,0.08);
+    border: 1px solid rgba(245,166,35,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #ffffff 0%, #a0a0c0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .header h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+
+  /* Currency Toggle */
+  .toggle-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+
+  .toggle {
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 4px;
+    gap: 2px;
+  }
+
+  .toggle button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 24px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .toggle button.active {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    box-shadow: 0 0 20px rgba(245,166,35,0.25);
+  }
+
+  /* Section Label */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .section-label::before, .section-label::after {
+    content: '';
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, rgba(245,166,35,0.3));
+  }
+
+  .section-label::after {
+    background: linear-gradient(90deg, rgba(245,166,35,0.3), transparent);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    opacity: 0;
+    background: linear-gradient(135deg, rgba(245,166,35,0.04) 0%, rgba(200,134,10,0.03) 100%);
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245,166,35,0.35);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(245,166,35,0.08);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card.popular {
+    border-color: var(--orange);
+    box-shadow: 0 0 30px rgba(245,166,35,0.14);
+  }
+
+  .card.popular:hover {
+    border-color: var(--orange);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 40px rgba(245,166,35,0.18);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -1px;
+    right: 24px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  /* Card corner glow */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at top right, rgba(245,166,35,0.08), transparent 70%);
+    border-radius: 0 20px 0 0;
+    pointer-events: none;
+  }
+
+  .card.popular::after {
+    background: radial-gradient(circle at top right, rgba(245,166,35,0.1), transparent 70%);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    min-height: 38px;
+  }
+
+  .price-wrap {
+    margin-bottom: 24px;
+  }
+
+  .price {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+    display: block;
+  }
+
+  .price .currency {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .price-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--card-border);
+    margin-bottom: 20px;
+  }
+
+  /* Features */
+  .features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    color: #b0b0c8;
+    line-height: 1.5;
+  }
+
+  .features li .icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    font-size: 10px;
+  }
+
+  .icon-cyan { background: rgba(245,166,35,0.12); color: var(--accent); }
+  .icon-purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+  .icon-green { background: rgba(0,200,150,0.12); color: var(--green); }
+  .icon-orange { background: rgba(255,107,43,0.12); color: var(--orange); }
+  .icon-gold { background: rgba(245,166,35,0.12); color: var(--gold); }
+
+  /* CTA Button */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.28);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245,166,35,0.38);
+  }
+
+  .btn-popular {
+    background: linear-gradient(135deg, var(--orange), #c8730a);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.3);
+  }
+
+  .btn-popular:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245,166,35,0.4);
+  }
+
+  /* Timeline tag */
+  .timeline-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .timeline-tag::before {
+    content: '⏱';
+    font-size: 11px;
+  }
+
+  /* Footer note */
+  .footer-note {
+    text-align: center;
+    margin-top: 56px;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+  }
+
+  .footer-note p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .footer-note p span {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeUp 0.5s ease both; }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+
+
+  /* Card Icon */
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+  .icon-bg-cyan { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.25); }
+  .icon-bg-orange { background: rgba(255,107,43,0.1); border: 1px solid rgba(255,107,43,0.2); }
+  .icon-bg-purple { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); }
+  .icon-bg-green { background: rgba(0,200,150,0.1); border: 1px solid rgba(0,200,150,0.2); }
+  .icon-bg-gold { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.2); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 580px) {
+    .grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 36px; }
+    .header { padding: 48px 0 32px; }
+    .wrapper { padding: 0 16px 60px; }
+    .card { padding: 24px 20px; }
+    .footer-note { padding: 24px 20px; }
+  }
+
+  /* Nav: hide center text on small screens to avoid overflow */
+  @media (max-width: 480px) {
+    nav > span { display: none; }
+  }
+
+  /* Modal */
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(16px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0);    }
+  }
+
+  #pricing-modal {
+    display: none;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #pricing-modal.open { display: flex; }
+
+  .modal-box {
+    background: #13131c;
+    border: 1px solid rgba(245,166,35,0.22);
+    border-radius: 20px;
+    padding: 36px 32px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    animation: modalIn 0.3s ease both;
+  }
+
+  .minput {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .minput:focus { border-color: rgba(245,166,35,0.5); }
+  .minput::placeholder { color: #6b6b80; }
+
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 500px) { .modal-grid { grid-template-columns: 1fr; } }
+</style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+
+<nav style="position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(245,166,35,0.1);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="/" style="display:inline-flex;align-items:center;gap:8px;color:#f5a623;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.05em;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    Back to Portfolio
+  </a>
+  <span style="font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:0.04em;">Cyberninja Innovations</span>
+  <a href="/#section-contact" style="display:inline-block;padding:7px 18px;border-radius:8px;background:linear-gradient(135deg,#f5a623,#c8730a);color:#fff;font-size:12px;font-weight:700;letter-spacing:0.05em;text-decoration:none;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Hire Me</a>
+</nav>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="badge">Transparent Pricing</div>
+    <h1>Service <span>Pricing</span></h1>
+    <p>Precision-built digital solutions for startups, businesses, and enterprises ready to scale.</p>
+  </div>
+
+  <div class="toggle-wrap">
+    <div class="toggle">
+      <button class="active" onclick="setCurrency('ngn', this)">₦ NGN</button>
+      <button onclick="setCurrency('usd', this)">$ USD</button>
+    </div>
+  </div>
+
+  <!-- WEBSITES -->
+  <div class="section-label">Website Packages</div>
+  <div class="grid" id="web-grid">
+
+    <div class="card">
+      <div class="card-icon icon-bg-cyan">🌐</div>
+      <div class="card-title">Landing Page</div>
+      <div class="card-desc">Perfect for startups and businesses making a powerful first impression.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="200,000" data-usd="125"><span class="currency" data-sym="₦">₦</span><span class="amount">200,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Single high-converting page with strategic design</li>
+        <li><span class="icon icon-green">✦</span>SEO optimization for local search visibility</li>
+        <li><span class="icon icon-purple">✦</span>Fully responsive across all devices</li>
+        <li><span class="icon icon-cyan">✦</span>Lead capture form with email integration</li>
+        <li><span class="icon icon-gold">✦</span>Basic analytics setup and tracking</li>
+      </ul>
+      <div class="timeline-tag">5–7 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-purple">🎨</div>
+      <div class="card-title">Personal Portfolio</div>
+      <div class="card-desc">Showcase your work and expertise with a stunning professional portfolio.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="300,000" data-usd="188"><span class="currency" data-sym="₦">₦</span><span class="amount">300,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Up to 5 beautifully crafted pages</li>
+        <li><span class="icon icon-green">✦</span>Advanced SEO optimization for better rankings</li>
+        <li><span class="icon icon-purple">✦</span>Custom personal branding and visual identity</li>
+        <li><span class="icon icon-orange">✦</span>Interactive portfolio gallery with lightbox</li>
+        <li><span class="icon icon-gold">✦</span>Contact form with spam protection</li>
+        <li><span class="icon icon-cyan">✦</span>Social media integration</li>
+      </ul>
+      <div class="timeline-tag">7–10 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-green">🖥️</div>
+      <div class="card-title">Basic Static Website</div>
+      <div class="card-desc">Essential web presence for small businesses with core functionality.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="400,000" data-usd="250"><span class="currency" data-sym="₦">₦</span><span class="amount">400,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Up to 5 professionally designed pages</li>
+        <li><span class="icon icon-green">✦</span>Basic SEO with meta tags and optimization</li>
+        <li><span class="icon icon-purple">✦</span>Mobile-first responsive design</li>
+        <li><span class="icon icon-orange">✦</span>Lightning-fast loading speeds</li>
+        <li><span class="icon icon-gold">✦</span>SSL certificate and security headers</li>
+      </ul>
+      <div class="timeline-tag">10–12 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+  </div>
+
+  <!-- CORPORATE -->
+  <div class="grid" style="margin-bottom:20px;">
+
+    <div class="card popular">
+      <div class="popular-badge">Most Popular</div>
+      <div class="card-icon icon-bg-orange">🏢</div>
+      <div class="card-title">Corporate Portfolio</div>
+      <div class="card-desc">Professional corporate presence with comprehensive business showcase.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="600,000" data-usd="375"><span class="currency" data-sym="₦">₦</span><span class="amount">600,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-orange">✦</span>Up to 10 enterprise-grade pages</li>
+        <li><span class="icon icon-cyan">✦</span>Advanced SEO with keyword research</li>
+        <li><span class="icon icon-purple">✦</span>Professional corporate branding package</li>
+        <li><span class="icon icon-green">✦</span>Detailed case studies with success metrics</li>
+        <li><span class="icon icon-orange">✦</span>Team profiles and company history</li>
+        <li><span class="icon icon-gold">✦</span>Advanced analytics and conversion tracking</li>
+        <li><span class="icon icon-cyan">✦</span>Priority support and consultation</li>
+      </ul>
+      <div class="timeline-tag">12–15 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-popular">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-cyan">📝</div>
+      <div class="card-title">Blog / News Site</div>
+      <div class="card-desc">Dynamic content platform for publishers and content creators.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="900,000" data-usd="560"><span class="currency" data-sym="₦">₦</span><span class="amount">900,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Unlimited pages with dynamic content management</li>
+        <li><span class="icon icon-green">✦</span>Advanced SEO with content optimization</li>
+        <li><span class="icon icon-purple">✦</span>Custom design tailored to your brand voice</li>
+        <li><span class="icon icon-orange">✦</span>Full CMS integration</li>
+        <li><span class="icon icon-gold">✦</span>Newsletter integration with automation</li>
+        <li><span class="icon icon-cyan">✦</span>Comment system and social sharing</li>
+        <li><span class="icon icon-green">✦</span>RSS feeds and content syndication</li>
+      </ul>
+      <div class="timeline-tag">20–25 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-gold">⚙️</div>
+      <div class="card-title">Corporate Website with CMS</div>
+      <div class="card-desc">Enterprise-level website with full content management capabilities.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="1,300,000" data-usd="815"><span class="currency" data-sym="₦">₦</span><span class="amount">1,300,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Unlimited pages with scalable architecture</li>
+        <li><span class="icon icon-gold">✦</span>Premium SEO with enterprise tools</li>
+        <li><span class="icon icon-purple">✦</span>Fully custom design and user experience</li>
+        <li><span class="icon icon-green">✦</span>Advanced content management system</li>
+        <li><span class="icon icon-orange">✦</span>Integrated blog with editorial workflow</li>
+        <li><span class="icon icon-cyan">✦</span>Multi-user roles and permissions</li>
+        <li><span class="icon icon-gold">✦</span>Cloud hosting and backup solutions</li>
+      </ul>
+      <div class="timeline-tag">20–25 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+  </div>
+
+  <!-- E-COMMERCE -->
+  <div class="section-label" style="margin-top:48px;">E-Commerce Solutions</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-icon icon-bg-green">🛒</div>
+      <div class="card-title">Basic E-Commerce</div>
+      <div class="card-desc">Start selling online with essential e-commerce functionality.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="1,300,000" data-usd="815"><span class="currency" data-sym="₦">₦</span><span class="amount">1,300,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Up to 20 products with detailed listings</li>
+        <li><span class="icon icon-green">✦</span>E-commerce SEO optimization</li>
+        <li><span class="icon icon-purple">✦</span>Complete shopping cart functionality</li>
+        <li><span class="icon icon-orange">✦</span>Paystack payment gateway integration</li>
+        <li><span class="icon icon-gold">✦</span>Mobile-optimized shopping experience</li>
+        <li><span class="icon icon-cyan">✦</span>Basic shipping and tax calculations</li>
+        <li><span class="icon icon-green">✦</span>Sales analytics and reporting</li>
+      </ul>
+      <div class="timeline-tag">25–30 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <div class="card popular">
+      <div class="popular-badge">Most Popular</div>
+      <div class="card-icon icon-bg-orange">🏪</div>
+      <div class="card-title">Standard E-Commerce</div>
+      <div class="card-desc">Comprehensive online store with advanced selling features.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="2,500,000" data-usd="1,565"><span class="currency" data-sym="₦">₦</span><span class="amount">2,500,000</span></span>
+        <div class="price-note">One-time payment</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-orange">✦</span>Up to 100 products with categories</li>
+        <li><span class="icon icon-cyan">✦</span>Advanced SEO for product visibility</li>
+        <li><span class="icon icon-green">✦</span>Advanced e-commerce functionality</li>
+        <li><span class="icon icon-purple">✦</span>Multiple payment gateway integration</li>
+        <li><span class="icon icon-orange">✦</span>Inventory management system</li>
+        <li><span class="icon icon-gold">✦</span>Customer accounts and order history</li>
+        <li><span class="icon icon-cyan">✦</span>Discount codes and promotions</li>
+      </ul>
+      <div class="timeline-tag">35–45 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-popular">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-gold">💎</div>
+      <div class="card-title">Premium E-Commerce</div>
+      <div class="card-desc">Enterprise-grade e-commerce solution with unlimited potential.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="3,000,000" data-usd="1,875"><span class="currency" data-sym="₦">₦</span><span class="amount">3,000,000</span></span>
+        <div class="price-note">Starting from</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Unlimited products and categories</li>
+        <li><span class="icon icon-gold">✦</span>Premium SEO with AI optimization</li>
+        <li><span class="icon icon-purple">✦</span>Custom e-commerce features development</li>
+        <li><span class="icon icon-green">✦</span>Multi-currency and language support</li>
+        <li><span class="icon icon-orange">✦</span>CRM integration and automation</li>
+        <li><span class="icon icon-gold">✦</span>Advanced analytics and business intelligence</li>
+        <li><span class="icon icon-cyan">✦</span>Enterprise security and compliance</li>
+      </ul>
+      <div class="timeline-tag">45–60 day delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+  </div>
+
+  <!-- CUSTOM / SaaS -->
+  <div class="section-label" style="margin-top:48px;">Custom Applications</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-icon icon-bg-cyan">⚡</div>
+      <div class="card-title">Starter Web App</div>
+      <div class="card-desc">Simple custom web application with core functionality and clean UI.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="1,500,000" data-usd="940"><span class="currency" data-sym="₦">₦</span><span class="amount">1,500,000</span></span>
+        <div class="price-note">Starting from</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Custom Django/Next.js architecture</li>
+        <li><span class="icon icon-green">✦</span>User authentication and role management</li>
+        <li><span class="icon icon-purple">✦</span>REST API with full documentation</li>
+        <li><span class="icon icon-orange">✦</span>PostgreSQL database setup</li>
+        <li><span class="icon icon-gold">✦</span>Basic admin dashboard</li>
+        <li><span class="icon icon-cyan">✦</span>DigitalOcean deployment and SSL</li>
+      </ul>
+      <div class="timeline-tag">4–6 week delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <div class="card popular">
+      <div class="popular-badge">Most Popular</div>
+      <div class="card-icon icon-bg-orange">🚀</div>
+      <div class="card-title">Full-Stack SaaS</div>
+      <div class="card-desc">Production-ready SaaS platform with payment integration and full backend.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="4,500,000" data-usd="2,815"><span class="currency" data-sym="₦">₦</span><span class="amount">4,500,000</span></span>
+        <div class="price-note">Starting from</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-orange">✦</span>Full Django REST + Next.js architecture</li>
+        <li><span class="icon icon-cyan">✦</span>Subscription billing with Paystack</li>
+        <li><span class="icon icon-green">✦</span>Advanced user dashboard and analytics</li>
+        <li><span class="icon icon-purple">✦</span>Email and SMS via Termii integration</li>
+        <li><span class="icon icon-gold">✦</span>Background tasks with Celery + Redis</li>
+        <li><span class="icon icon-orange">✦</span>Third-party API integrations</li>
+        <li><span class="icon icon-cyan">✦</span>DigitalOcean cloud deployment</li>
+      </ul>
+      <div class="timeline-tag">10–14 week delivery timeline</div>
+      <a href="/#section-contact" class="btn btn-popular">Get Started</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon icon-bg-purple">🏗️</div>
+      <div class="card-title">Enterprise Platform</div>
+      <div class="card-desc">Large-scale custom platform with complex integrations and enterprise features.</div>
+      <div class="price-wrap">
+        <span class="price" data-ngn="8,000,000" data-usd="5,000"><span class="currency" data-sym="₦">₦</span><span class="amount">8,000,000</span></span>
+        <div class="price-note">Starting from</div>
+      </div>
+      <div class="divider"></div>
+      <ul class="features">
+        <li><span class="icon icon-cyan">✦</span>Scalable microservices architecture</li>
+        <li><span class="icon icon-gold">✦</span>AI and ML feature integration</li>
+        <li><span class="icon icon-purple">✦</span>Multi-tenant SaaS infrastructure</li>
+        <li><span class="icon icon-green">✦</span>Real-time features with WebSockets</li>
+        <li><span class="icon icon-orange">✦</span>Full DevOps pipeline and CI/CD</li>
+        <li><span class="icon icon-gold">✦</span>Dedicated post-launch support</li>
+        <li><span class="icon icon-cyan">✦</span>Custom SLA and consultation</li>
+      </ul>
+      <div class="timeline-tag">Custom timeline — let's talk</div>
+      <a href="/#section-contact" class="btn btn-primary">Get Started</a>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    <p>All prices are negotiable based on project scope and requirements. <span>Custom quotes</span> available for unique projects. Milestone-based payment structure — 65% upfront, 35% mid-development. Reach out via the contact section to discuss your project.</p>
+  </div>
+
+</div>
+
+<!-- Contact Modal -->
+<div id="pricing-modal">
+  <div class="modal-box">
+
+    <!-- Close -->
+    <button onclick="closeModal()" style="position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:26px;cursor:pointer;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">&times;</button>
+
+    <!-- Package badge -->
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.25);border-radius:100px;padding:5px 14px;font-size:11px;color:#f5a623;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:18px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#f5a623;flex-shrink:0;"></span>
+      <span id="modal-package-badge">Package</span>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;color:#fff;font-size:20px;font-weight:700;margin-bottom:6px;">Let's Get Started</h3>
+    <p style="color:#6b6b80;font-size:13px;margin-bottom:24px;line-height:1.6;">Tell me about your project and I'll respond within 24 hours.</p>
+
+    <!-- Form -->
+    <form id="modal-form">
+      <input type="hidden" name="package" id="modal-package-input">
+      <div class="modal-grid">
+        <input class="minput" type="text" name="name" placeholder="Your Name" required>
+        <input class="minput" type="email" name="email" placeholder="Your Email" required>
+      </div>
+      <input class="minput" type="text" name="phone" placeholder="Your Phone" required style="margin-bottom:10px;display:block;">
+      <textarea class="minput" name="message" placeholder="Tell me more about your project..." rows="4" style="resize:vertical;margin-bottom:20px;display:block;"></textarea>
+      <div id="modal-captcha-wrap" style="display:none;margin-bottom:16px;text-align:center;">
+        <p style="color:#6b6b80;font-size:12px;margin-bottom:10px;">Complete the verification below to send your message.</p>
+        <div id="modal-captcha-widget" style="display:inline-block;"></div>
+      </div>
+      <button id="modal-submit-btn" type="button" style="width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#f5a623,#c8730a);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;cursor:pointer;letter-spacing:0.03em;transition:all 0.25s;box-shadow:0 4px 20px rgba(245,166,35,0.25);">Send Message &rarr;</button>
+      <div id="modal-error" style="display:none;color:#ff7070;font-size:13px;text-align:center;margin-top:12px;"></div>
+    </form>
+
+    <!-- Success -->
+    <div id="modal-success" style="display:none;text-align:center;padding:28px 0 8px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(0,200,150,0.12);border:1px solid rgba(0,200,150,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px;color:#00c896;">✓</div>
+      <p style="color:#fff;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;">Message sent!</p>
+      <p style="color:#6b6b80;font-size:13px;">I'll get back to you within 24 hours.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let currentCurrency = 'ngn';
+
+  function setCurrency(currency, btn) {
+    currentCurrency = currency;
+    document.querySelectorAll('.toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.price').forEach(el => {
+      const ngn = el.getAttribute('data-ngn');
+      const usd = el.getAttribute('data-usd');
+      const sym = el.querySelector('[data-sym]');
+      const amt = el.querySelector('.amount');
+      if (currency === 'ngn') {
+        sym.textContent = '₦';
+        amt.textContent = ngn;
+      } else {
+        sym.textContent = '$';
+        amt.textContent = usd;
+      }
+    });
+  }
+
+  // ── Modal ─────────────────────────────────���────────
+  var modalWidgetId = null;
+  var modalCaptchaShown = false;
+  var modalCaptchaReady = false;
+
+  function openModal(packageName) {
+    document.getElementById('modal-form').reset();
+    document.getElementById('modal-package-input').value = packageName;
+    document.getElementById('modal-package-badge').textContent = packageName;
+    document.getElementById('modal-form').style.display = '';
+    document.getElementById('modal-success').style.display = 'none';
+    document.getElementById('modal-error').style.display = 'none';
+    document.getElementById('modal-captcha-wrap').style.display = 'none';
+    if (modalWidgetId !== null) { try { grecaptcha.reset(modalWidgetId); } catch(e) {} }
+    modalCaptchaShown = false;
+    modalCaptchaReady = false;
+    var btn = document.getElementById('modal-submit-btn');
+    btn.textContent = 'Send Message \u2192';
+    btn.disabled = false;
+    document.getElementById('pricing-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('pricing-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('pricing-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  async function modalDoSend(token) {
+    var btn = document.getElementById('modal-submit-btn');
+    btn.textContent = 'Sending\u2026';
+    btn.disabled = true;
+    var data = new FormData(document.getElementById('modal-form'));
+    var pkg = data.get('package');
+    var msg = (data.get('message') || '').trim() || '(No additional details)';
+    data.set('message', 'Pricing Package Enquiry: ' + pkg + '\n\n' + msg);
+    data.append('g-recaptcha-response', token);
+    try {
+      var res = await fetch('/contact', { method: 'POST', body: data });
+      if (res.ok) {
+        document.getElementById('modal-form').style.display = 'none';
+        document.getElementById('modal-captcha-wrap').style.display = 'none';
+        document.getElementById('modal-success').style.display = 'block';
+        setTimeout(closeModal, 3500);
+      } else {
+        var code = await res.text();
+        var msgs = {
+          'captcha_failed': 'CAPTCHA verification failed. Please redo the verification.',
+          'missing_fields': 'Please fill in all required fields.',
+          'invalid_email': 'Your email address looks incorrect — please double-check it (e.g. name@example.com).',
+          'send_failed': 'Failed to send. Please email me directly.'
+        };
+        throw new Error(msgs[code] || 'Something went wrong (' + code + '). Please try again.');
+      }
+    } catch(e) {
+      var errEl = document.getElementById('modal-error');
+      errEl.textContent = e.message || 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      modalCaptchaReady = false;
+      btn.textContent = '\u2191 Complete the verification above';
+      btn.disabled = true;
+      if (modalWidgetId !== null) { try { grecaptcha.reset(modalWidgetId); } catch(e2) {} }
+    }
+  }
+
+  document.getElementById('modal-submit-btn').addEventListener('click', function() {
+    var form = document.getElementById('modal-form');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var errEl = document.getElementById('modal-error');
+    errEl.style.display = 'none';
+    var self = this;
+    var wrap = document.getElementById('modal-captcha-wrap');
+    if (!modalCaptchaShown) {
+      wrap.style.display = 'block';
+      modalCaptchaShown = true;
+      modalCaptchaReady = false;
+      self.textContent = '\u2191 Complete the verification above';
+      self.disabled = true;
+      if (modalWidgetId === null) {
+        modalWidgetId = grecaptcha.render('modal-captcha-widget', {
+          sitekey: '6LcUJHwsAAAAALWCroDhefSNL8si1Pn3ptEETXef',
+          callback: function() {
+            modalCaptchaReady = true;
+            var btn = document.getElementById('modal-submit-btn');
+            btn.textContent = 'Send Message \u2192';
+            btn.disabled = false;
+          },
+          'error-callback': function() {
+            errEl.textContent = 'CAPTCHA error. Please try again.';
+            errEl.style.display = 'block';
+          }
+        });
+      }
+    } else if (modalCaptchaReady) {
+      var token = grecaptcha.getResponse(modalWidgetId);
+      if (!token) {
+        grecaptcha.reset(modalWidgetId);
+        modalCaptchaReady = false;
+        self.textContent = '\u2191 Complete the verification again';
+        self.disabled = true;
+        errEl.textContent = 'Verification expired. Please redo the CAPTCHA.';
+        errEl.style.display = 'block';
+      } else {
+        modalDoSend(token);
+      }
+    } else {
+      errEl.textContent = 'Please complete the CAPTCHA first.';
+      errEl.style.display = 'block';
+    }
+  });
+
+  document.querySelectorAll('.btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var card = this.closest('.card');
+      var packageName = card.querySelector('.card-title').textContent.trim();
+      openModal(packageName);
+    });
+  });
+
+  // Default: show USD prices; visitor can switch to NGN
+  (function() {
+    var usdBtn = document.querySelector('.toggle button:last-child');
+    if (usdBtn) setCurrency('usd', usdBtn);
+  })();
+</script>
+</body>
+</html>

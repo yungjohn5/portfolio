@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrating React with Flask: A Complete Guide | Cyberninja Innovations</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="blog-post-container">
+        <article class="blog-post">
+            <!-- Header -->
+            <header class="post-header">
+                <div class="container">
+                    <a href="index.html#section-blog" class="back-link">
+                        <i class="fa fa-arrow-left"></i> Back to Blog
+                    </a>
+                    <h1 class="post-title">Integrating React with Flask: A Complete Guide</h1>
+                    <div class="post-meta-header">
+                        <span class="post-author"><i class="fa fa-user"></i> Divine Ebubechukwu</span>
+                        <span class="post-date"><i class="fa fa-calendar"></i> November 15, 2024</span>
+                        <span class="post-category"><i class="fa fa-folder"></i> Tutorial</span>
+                        <span class="post-read-time"><i class="fa fa-clock"></i> 14 min read</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="post-featured-image">
+                <img src="images/blog/react-flask-integration.jpg" alt="React and Flask Integration">
+            </div>
+
+            <!-- Content -->
+            <div class="container post-content">
+                <section class="content-section">
+                    <h2>Introduction</h2>
+                    <p>Combining React's powerful frontend capabilities with Flask's elegant backend simplicity creates a dream stack for building modern web applications. This is the exact combination I use for most projects at Cyberninja Innovations—React handles the user interface while Flask powers the API and business logic.</p>
+                    
+                    <p>In this comprehensive guide, I'll show you exactly how to integrate React with Flask, from project setup to deployment. We'll build a complete task management application that demonstrates authentication, API calls, state management, and real-world patterns I use in production.</p>
+
+                    <div class="why-this-stack">
+                        <h3>Why React + Flask?</h3>
+                        <div class="benefits-grid">
+                            <div class="benefit-card">
+                                <h4>React Benefits</h4>
+                                <ul>
+                                    <li>Component-based architecture</li>
+                                    <li>Virtual DOM for performance</li>
+                                    <li>Rich ecosystem</li>
+                                    <li>Great developer experience</li>
+                                </ul>
+                            </div>
+                            <div class="benefit-card">
+                                <h4>Flask Benefits</h4>
+                                <ul>
+                                    <li>Lightweight and flexible</li>
+                                    <li>Easy to learn</li>
+                                    <li>Perfect for APIs</li>
+                                    <li>Python ecosystem</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Architecture Overview</h2>
+
+                    <div class="architecture-diagram">
+                        <div class="code-block">
+                            <pre><code>Application Structure:
+
+┌─────────────────────────────────────────┐
+│          React Frontend                  │
+│  ┌────────────────────────────────┐     │
+│  │  Components                     │     │
+│  │  - Login, Dashboard, TaskList  │     │
+│  └────────────────────────────────┘     │
+│                 ↓                        │
+│  ┌────────────────────────────────┐     │
+│  │  API Service Layer              │     │
+│  │  - HTTP requests to backend    │     │
+│  └────────────────────────────────┘     │
+└─────────────────────────────────────────┘
+                  ↓ HTTP/JSON
+┌─────────────────────────────────────────┐
+│          Flask Backend (API)             │
+│  ┌────────────────────────────────┐     │
+│  │  Routes/Controllers             │     │
+│  │  - /api/auth, /api/tasks       │     │
+│  └────────────────────────────────┘     │
+│                 ↓                        │
+│  ┌────────────────────────────────┐     │
+│  │  Business Logic                 │     │
+│  │  - Authentication, CRUD ops    │     │
+│  └────────────────────────────────┘     │
+│                 ↓                        │
+│  ┌────────────────────────────────┐     │
+│  │  Database (MySQL)               │     │
+│  └────────────────────────────────┘     │
+└─────────────────────────────────────────┘</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="key-concept">
+                        <h4>Key Concept: Separation of Concerns</h4>
+                        <p><strong>React:</strong> Handles UI, user interactions, and presentation logic</p>
+                        <p><strong>Flask:</strong> Handles data, business logic, and serves RESTful API</p>
+                        <p><strong>Communication:</strong> JSON over HTTP/HTTPS</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Part 1: Setting Up the Flask Backend</h2>
+
+                    <h3>Step 1: Project Structure</h3>
+                    <div class="code-block">
+                        <pre><code>task-manager/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── routes/
+│   │   │   ├── __init__.py
+│   │   │   ├── auth.py
+│   │   │   └── tasks.py
+│   │   ├── config.py
+│   │   └── extensions.py
+│   ├── migrations/
+│   ├── venv/
+│   ├── requirements.txt
+│   └── run.py
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── package.json
+│   └── .env
+└── README.md</code></pre>
+                    </div>
+
+                    <h3>Step 2: Flask Setup</h3>
+                    <div class="code-block">
+                        <pre><code># backend/requirements.txt
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-JWT-Extended==4.5.3
+Flask-CORS==4.0.0
+Flask-Migrate==4.0.5
+python-dotenv==1.0.0
+PyMySQL==1.1.0</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <pre><code># backend/app/__init__.py
+from flask import Flask
+from flask_cors import CORS
+from app.extensions import db, jwt, migrate
+from app.config import Config
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+    
+    # Initialize extensions
+    db.init_app(app)
+    jwt.init_app(app)
+    migrate.init_app(app, db)
+    
+    # Enable CORS for React frontend
+    CORS(app, origins=['http://localhost:3000'])
+    
+    # Register blueprints
+    from app.routes.auth import auth_bp
+    from app.routes.tasks import tasks_bp
+    
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(tasks_bp, url_prefix='/api/tasks')
+    
+    return app</code></pre>
+                    </div>
+
+                    <h3>Step 3: Database Models</h3>
+                    <div class="code-block">
+                        <pre><code># backend/app/models.py
+from app.extensions import db
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    tasks = db.relationship('Task', backref='user', lazy=True, cascade='all, delete-orphan')
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'created_at': self.created_at.isoformat()
+        }
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    status = db.Column(db.String(20), default='pending')  # pending, in_progress, completed
+    priority = db.Column(db.String(20), default='medium')  # low, medium, high
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'description': self.description,
+            'status': self.status,
+            'priority': self.priority,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }</code></pre>
+                    </div>
+
+                    <h3>Step 4: Authentication Routes</h3>
+                    <div class="code-block">
+                        <pre><code># backend/app/routes/auth.py
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from app.models import User
+from app.extensions import db
+
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/register', methods=['POST'])
+def register():
+    """Register a new user"""
+    data = request.get_json()
+    
+    # Validate input
+    if not data.get('username') or not data.get('email') or not data.get('password'):
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    # Check if user exists
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'error': 'Username already exists'}), 400
+    
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'error': 'Email already exists'}), 400
+    
+    # Create user
+    user = User(
+        username=data['username'],
+        email=data['email']
+    )
+    user.set_password(data['password'])
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    # Create access token
+    access_token = create_access_token(identity=user.id)
+    
+    return jsonify({
+        'message': 'User created successfully',
+        'user': user.to_dict(),
+        'access_token': access_token
+    }), 201
+
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    """Login user"""
+    data = request.get_json()
+    
+    # Validate input
+    if not data.get('username') or not data.get('password'):
+        return jsonify({'error': 'Missing username or password'}), 400
+    
+    # Find user
+    user = User.query.filter_by(username=data['username']).first()
+    
+    if not user or not user.check_password(data['password']):
+        return jsonify({'error': 'Invalid credentials'}), 401
+    
+    # Create access token
+    access_token = create_access_token(identity=user.id)
+    
+    return jsonify({
+        'message': 'Login successful',
+        'user': user.to_dict(),
+        'access_token': access_token
+    })
+
+@auth_bp.route('/me', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    """Get current user info"""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    return jsonify({'user': user.to_dict()})</code></pre>
+                    </div>
+
+                    <h3>Step 5: Task Routes</h3>
+                    <div class="code-block">
+                        <pre><code># backend/app/routes/tasks.py
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.models import Task
+from app.extensions import db
+
+tasks_bp = Blueprint('tasks', __name__)
+
+@tasks_bp.route('', methods=['GET'])
+@jwt_required()
+def get_tasks():
+    """Get all tasks for current user"""
+    current_user_id = get_jwt_identity()
+    
+    # Optional filters
+    status = request.args.get('status')
+    priority = request.args.get('priority')
+    
+    # Build query
+    query = Task.query.filter_by(user_id=current_user_id)
+    
+    if status:
+        query = query.filter_by(status=status)
+    if priority:
+        query = query.filter_by(priority=priority)
+    
+    tasks = query.order_by(Task.created_at.desc()).all()
+    
+    return jsonify({
+        'tasks': [task.to_dict() for task in tasks]
+    })
+
+@tasks_bp.route('', methods=['POST'])
+@jwt_required()
+def create_task():
+    """Create a new task"""
+    current_user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    # Validate input
+    if not data.get('title'):
+        return jsonify({'error': 'Title is required'}), 400
+    
+    # Create task
+    task = Task(
+        user_id=current_user_id,
+        title=data['title'],
+        description=data.get('description', ''),
+        status=data.get('status', 'pending'),
+        priority=data.get('priority', 'medium')
+    )
+    
+    db.session.add(task)
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Task created successfully',
+        'task': task.to_dict()
+    }), 201
+
+@tasks_bp.route('/<int:task_id>', methods=['GET'])
+@jwt_required()
+def get_task(task_id):
+    """Get specific task"""
+    current_user_id = get_jwt_identity()
+    
+    task = Task.query.filter_by(id=task_id, user_id=current_user_id).first()
+    
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+    
+    return jsonify({'task': task.to_dict()})
+
+@tasks_bp.route('/<int:task_id>', methods=['PUT'])
+@jwt_required()
+def update_task(task_id):
+    """Update task"""
+    current_user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    task = Task.query.filter_by(id=task_id, user_id=current_user_id).first()
+    
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+    
+    # Update fields
+    if 'title' in data:
+        task.title = data['title']
+    if 'description' in data:
+        task.description = data['description']
+    if 'status' in data:
+        task.status = data['status']
+    if 'priority' in data:
+        task.priority = data['priority']
+    
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Task updated successfully',
+        'task': task.to_dict()
+    })
+
+@tasks_bp.route('/<int:task_id>', methods=['DELETE'])
+@jwt_required()
+def delete_task(task_id):
+    """Delete task"""
+    current_user_id = get_jwt_identity()
+    
+    task = Task.query.filter_by(id=task_id, user_id=current_user_id).first()
+    
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+    
+    db.session.delete(task)
+    db.session.commit()
+    
+    return jsonify({'message': 'Task deleted successfully'})</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Part 2: Setting Up the React Frontend</h2>
+
+                    <h3>Step 1: Create React App</h3>
+                    <div class="code-block">
+                        <pre><code># Create React app
+npx create-react-app frontend
+cd frontend
+
+# Install dependencies
+npm install axios react-router-dom</code></pre>
+                    </div>
+
+                    <h3>Step 2: Environment Configuration</h3>
+                    <div class="code-block">
+                        <pre><code># frontend/.env
+REACT_APP_API_URL=http://localhost:5000/api</code></pre>
+                    </div>
+
+                    <h3>Step 3: API Service Layer</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/services/api.js
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+// Create axios instance with default config
+const api = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+// Add token to requests automatically
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Handle response errors globally
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            // Token expired or invalid
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
+// Authentication API
+export const authAPI = {
+    register: (userData) => api.post('/auth/register', userData),
+    login: (credentials) => api.post('/auth/login', credentials),
+    getCurrentUser: () => api.get('/auth/me')
+};
+
+// Tasks API
+export const tasksAPI = {
+    getAll: (filters) => api.get('/tasks', { params: filters }),
+    getById: (id) => api.get(`/tasks/${id}`),
+    create: (taskData) => api.post('/tasks', taskData),
+    update: (id, taskData) => api.put(`/tasks/${id}`, taskData),
+    delete: (id) => api.delete(`/tasks/${id}`)
+};
+
+export default api;</code></pre>
+                    </div>
+
+                    <h3>Step 4: Authentication Context</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/context/AuthContext.js
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authAPI } from '../services/api';
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Check if user is logged in on mount
+        const token = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
+        
+        if (token && savedUser) {
+            setUser(JSON.parse(savedUser));
+        }
+        setLoading(false);
+    }, []);
+
+    const login = async (username, password) => {
+        try {
+            const response = await authAPI.login({ username, password });
+            const { user, access_token } = response.data;
+            
+            localStorage.setItem('token', access_token);
+            localStorage.setItem('user', JSON.stringify(user));
+            setUser(user);
+            
+            return { success: true };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.response?.data?.error || 'Login failed'
+            };
+        }
+    };
+
+    const register = async (userData) => {
+        try {
+            const response = await authAPI.register(userData);
+            const { user, access_token } = response.data;
+            
+            localStorage.setItem('token', access_token);
+            localStorage.setItem('user', JSON.stringify(user));
+            setUser(user);
+            
+            return { success: true };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.response?.data?.error || 'Registration failed'
+            };
+        }
+    };
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within AuthProvider');
+    }
+    return context;
+};</code></pre>
+                    </div>
+
+                    <h3>Step 5: Login Component</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/components/Login.js
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import './Auth.css';
+
+function Login() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        const result = await login(username, password);
+        
+        if (result.success) {
+            navigate('/dashboard');
+        } else {
+            setError(result.error);
+        }
+        
+        setLoading(false);
+    };
+
+    return (
+        <div className="auth-container">
+            <div className="auth-card">
+                <h2>Login</h2>
+                
+                {error && (
+                    <div className="alert alert-error">
+                        {error}
+                    </div>
+                )}
+                
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        className="btn-primary"
+                        disabled={loading}
+                    >
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                </form>
+                
+                <p className="auth-footer">
+                    Don't have an account? <Link to="/register">Register</Link>
+                </p>
+            </div>
+        </div>
+    );
+}
+
+export default Login;</code></pre>
+                    </div>
+
+                    <h3>Step 6: Task List Component</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/components/TaskList.js
+import React, { useState, useEffect } from 'react';
+import { tasksAPI } from '../services/api';
+import TaskItem from './TaskItem';
+import TaskForm from './TaskForm';
+import './TaskList.css';
+
+function TaskList() {
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [filter, setFilter] = useState('all');
+    const [showForm, setShowForm] = useState(false);
+
+    useEffect(() => {
+        fetchTasks();
+    }, [filter]);
+
+    const fetchTasks = async () => {
+        try {
+            setLoading(true);
+            const filters = filter !== 'all' ? { status: filter } : {};
+            const response = await tasksAPI.getAll(filters);
+            setTasks(response.data.tasks);
+            setError('');
+        } catch (err) {
+            setError('Failed to fetch tasks');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCreateTask = async (taskData) => {
+        try {
+            await tasksAPI.create(taskData);
+            setShowForm(false);
+            fetchTasks(); // Refresh list
+        } catch (err) {
+            console.error('Failed to create task:', err);
+        }
+    };
+
+    const handleUpdateTask = async (id, updates) => {
+        try {
+            await tasksAPI.update(id, updates);
+            fetchTasks(); // Refresh list
+        } catch (err) {
+            console.error('Failed to update task:', err);
+        }
+    };
+
+    const handleDeleteTask = async (id) => {
+        if (window.confirm('Are you sure you want to delete this task?')) {
+            try {
+                await tasksAPI.delete(id);
+                fetchTasks(); // Refresh list
+            } catch (err) {
+                console.error('Failed to delete task:', err);
+            }
+        }
+    };
+
+    if (loading) {
+        return <div className="loading">Loading tasks...</div>;
+    }
+
+    return (
+        <div className="task-list-container">
+            <div className="task-list-header">
+                <h2>My Tasks</h2>
+                <button 
+                    className="btn-primary"
+                    onClick={() => setShowForm(true)}
+                >
+                    + New Task
+                </button>
+            </div>
+
+            {error && <div className="alert alert-error">{error}</div>}
+
+            {/* Filter buttons */}
+            <div className="filter-buttons">
+                <button 
+                    className={filter === 'all' ? 'active' : ''}
+                    onClick={() => setFilter('all')}
+                >
+                    All
+                </button>
+                <button 
+                    className={filter === 'pending' ? 'active' : ''}
+                    onClick={() => setFilter('pending')}
+                >
+                    Pending
+                </button>
+                <button 
+                    className={filter === 'in_progress' ? 'active' : ''}
+                    onClick={() => setFilter('in_progress')}
+                >
+                    In Progress
+                </button>
+                <button 
+                    className={filter === 'completed' ? 'active' : ''}
+                    onClick={() => setFilter('completed')}
+                >
+                    Completed
+                </button>
+            </div>
+
+            {/* Task form modal */}
+            {showForm && (
+                <TaskForm
+                    onSubmit={handleCreateTask}
+                    onCancel={() => setShowForm(false)}
+                />
+            )}
+
+            {/* Task list */}
+            <div className="tasks-grid">
+                {tasks.length === 0 ? (
+                    <div className="no-tasks">
+                        <p>No tasks found. Create your first task!</p>
+                    </div>
+                ) : (
+                    tasks.map(task => (
+                        <TaskItem
+                            key={task.id}
+                            task={task}
+                            onUpdate={handleUpdateTask}
+                            onDelete={handleDeleteTask}
+                        />
+                    ))
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default TaskList;</code></pre>
+                    </div>
+
+                    <h3>Step 7: Task Item Component</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/components/TaskItem.js
+import React, { useState } from 'react';
+import './TaskItem.css';
+
+function TaskItem({ task, onUpdate, onDelete }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedTask, setEditedTask] = useState(task);
+
+    const handleStatusChange = (newStatus) => {
+        onUpdate(task.id, { status: newStatus });
+    };
+
+    const handleSave = () => {
+        onUpdate(task.id, editedTask);
+        setIsEditing(false);
+    };
+
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'high': return '#ef4444';
+            case 'medium': return '#f59e0b';
+            case 'low': return '#10b981';
+            default: return '#6b7280';
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'completed': return '#10b981';
+            case 'in_progress': return '#3b82f6';
+            case 'pending': return '#6b7280';
+            default: return '#6b7280';
+        }
+    };
+
+    return (
+        <div className="task-item">
+            <div className="task-header">
+                <span 
+                    className="priority-badge"
+                    style={{ backgroundColor: getPriorityColor(task.priority) }}
+                >
+                    {task.priority}
+                </span>
+                <div className="task-actions">
+                    <button onClick={() => setIsEditing(!isEditing)}>
+                        ✏️
+                    </button>
+                    <button onClick={() => onDelete(task.id)}>
+                        🗑️
+                    </button>
+                </div>
+            </div>
+
+            {isEditing ? (
+                <div className="task-edit-form">
+                    <input
+                        type="text"
+                        value={editedTask.title}
+                        onChange={(e) => setEditedTask({
+                            ...editedTask,
+                            title: e.target.value
+                        })}
+                    />
+                    <textarea
+                        value={editedTask.description}
+                        onChange={(e) => setEditedTask({
+                            ...editedTask,
+                            description: e.target.value
+                        })}
+                    />
+                    <div className="edit-actions">
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setIsEditing(false)}>Cancel</button>
+                    </div>
+                </div>
+            ) : (
+                <>
+                    <h3>{task.title}</h3>
+                    <p className="task-description">{task.description}</p>
+                </>
+            )}
+
+            <div className="task-footer">
+                <select
+                    value={task.status}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                    style={{ color: getStatusColor(task.status) }}
+                >
+                    <option value="pending">Pending</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <span className="task-date">
+                    {new Date(task.created_at).toLocaleDateString()}
+                </span>
+            </div>
+        </div>
+    );
+}
+
+export default TaskItem;</code></pre>
+                    </div>
+
+                    <h3>Step 8: App Router</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/App.js
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import './App.css';
+
+// Protected Route Component
+function ProtectedRoute({ children }) {
+    const { user, loading } = useAuth();
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    return user ? children : <Navigate to="/login" />;
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <div className="app">
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route 
+                            path="/dashboard" 
+                            element={
+                                <ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>
+                            } 
+                        />
+                        <Route path="/" element={<Navigate to="/dashboard" />} />
+                    </Routes>
+                </div>
+            </AuthProvider>
+        </BrowserRouter>
+    );
+}
+
+export default App;</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Part 3: Advanced Patterns</h2>
+
+                    <h3>1. Error Handling</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/hooks/useAPI.js
+import { useState, useCallback } from 'react';
+
+export const useAPI = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const execute = useCallback(async (apiCall) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const result = await apiCall();
+            return { success: true, data: result.data };
+        } catch (err) {
+            const errorMessage = err.response?.data?.error || 'Something went wrong';
+            setError(errorMessage);
+            return { success: false, error: errorMessage };
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    return { execute, loading, error };
+};</code></pre>
+                    </div>
+
+                    <h3>2. Debounced Search</h3>
+                    <div class="code-block">
+                        <pre><code>// frontend/src/components/TaskSearch.js
+import React, { useState, useEffect } from 'react';
+import { tasksAPI } from '../services/api';
+
+function TaskSearch({ onResults }) {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        // Debounce search
+        const timer = setTimeout(() => {
+            if (searchTerm) {
+                searchTasks(searchTerm);
+            } else {
+                onResults([]);
+            }
+        }, 500); // Wait 500ms after user stops typing
+
+        return () => clearTimeout(timer);
+    }, [searchTerm]);
+
+    const searchTasks = async (term) => {
+        try {
+            const response = await tasksAPI.getAll({ search: term });
+            onResults(response.data.tasks);
+        } catch (err) {
+            console.error('Search failed:', err);
+        }
+    };
+
+    return (
+        <input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+        />
+    );
+}</code></pre>
+                    </div>
+
+                    <h3>3. Optimistic Updates</h3>
+                    <div class="code-block">
+                        <pre><code>// Optimistic UI update pattern
+const handleUpdateTask = async (id, updates) => {
+    // Update UI immediately (optimistic)
+    setTasks(prevTasks => 
+        prevTasks.map(task => 
+            task.id === id ? { ...task, ...updates } : task
+        )
+    );
+
+    try {
+        // Send to server
+        await tasksAPI.update(id, updates);
+    } catch (err) {
+        // Revert on error
+        console.error('Update failed, reverting:', err);
+        fetchTasks(); // Reload from server
+    }
+};</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Part 4: Deployment</h2>
+
+                    <h3>Option 1: Separate Deployment (Recommended)</h3>
+                    <div class="deployment-option">
+                        <h4>Backend (Flask) - Deploy to Heroku/DigitalOcean:</h4>
+                        <div class="code-block">
+                            <pre><code># Procfile
+web: gunicorn run:app
+
+# requirements.txt (add)
+gunicorn==21.2.0</code></pre>
+                        </div>
+
+                        <h4>Frontend (React) - Deploy to Vercel/Netlify:</h4>
+                        <div class="code-block">
+                            <pre><code># Update .env for production
+REACT_APP_API_URL=https://your-backend-api.com/api
+
+# Build
+npm run build
+
+# Deploy build folder</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Option 2: Flask Serves React (Monolithic)</h3>
+                    <div class="code-block">
+                        <pre><code># Build React app
+cd frontend
+npm run build
+
+# Flask serves React build
+# backend/app/__init__.py
+from flask import send_from_directory
+import os
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react(path):
+    if path and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+# Configure static folder
+app = Flask(__name__, static_folder='../../frontend/build')</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Best Practices Summary</h2>
+
+                    <div class="best-practices-grid">
+                        <div class="practice-card">
+                            <h4>🔒 Security</h4>
+                            <ul>
+                                <li>Use HTTPS in production</li>
+                                <li>Validate all input</li>
+                                <li>Implement CORS properly</li>
+                                <li>Store tokens securely</li>
+                            </ul>
+                        </div>
+
+                        <div class="practice-card">
+                            <h4>🚀 Performance</h4>
+                            <ul>
+                                <li>Implement caching</li>
+                                <li>Lazy load components</li>
+                                <li>Optimize images</li>
+                                <li>Use pagination</li>
+                            </ul>
+                        </div>
+
+                        <div class="practice-card">
+                            <h4>📝 Code Quality</h4>
+                            <ul>
+                                <li>Separate concerns (API layer)</li>
+                                <li>Use TypeScript for type safety</li>
+                                <li>Write reusable components</li>
+                                <li>Handle errors gracefully</li>
+                            </ul>
+                        </div>
+
+                        <div class="practice-card">
+                            <h4>🧪 Testing</h4>
+                            <ul>
+                                <li>Test API endpoints</li>
+                                <li>Test React components</li>
+                                <li>Integration tests</li>
+                                <li>E2E testing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>Conclusion</h2>
+                    <p>Integrating React with Flask creates a powerful, modern web application stack. The separation of concerns—Flask handling the backend logic and React managing the UI—makes your application easier to develop, test, and scale.</p>
+
+                    <div class="key-takeaways">
+                        <h3>Key Takeaways:</h3>
+                        <ol class="content-list">
+                            <li><strong>API-First Design:</strong> Flask serves only JSON, React consumes it</li>
+                            <li><strong>JWT Authentication:</strong> Secure, stateless authentication</li>
+                            <li><strong>CORS Configuration:</strong> Essential for development and production</li>
+                            <li><strong>Centralized API Service:</strong> All API calls in one place</li>
+                            <li><strong>Error Handling:</strong> Handle errors on both frontend and backend</li>
+                            <li><strong>State Management:</strong> React Context for auth, local state for components</li>
+                        </ol>
+                    </div>
+
+                    <p>This architecture has served me well across numerous projects. Start with this foundation, then add features like WebSockets for real-time updates, Redis for caching, or Celery for background jobs as your application grows.</p>
+
+                    <p class="final-thought"><em>The beauty of this stack is its flexibility. You can start simple and scale up as needed, adding complexity only when required.</em></p>
+                </section>
+
+                <!-- Call to Action -->
+                <section class="content-section cta-section">
+                    <div class="cta-box">
+                        <h3>Need Help Building Your React + Flask Application?</h3>
+                        <p>I can help you architect and build modern full-stack applications with React and Flask.</p>
+                        <a href="index.html#section-contact" class="btn-primary">Start Your Project</a>
+                    </div>
+                </section>
+
+                <!-- Tags -->
+                <div class="post-tags">
+                    <span class="tag-label">Tags:</span>
+                    <a href="#" class="tag">React</a>
+                    <a href="#" class="tag">Flask</a>
+                    <a href="#" class="tag">Full-Stack</a>
+                    <a href="#" class="tag">API</a>
+                    <a href="#" class="tag">JWT</a>
+                    <a href="#" class="tag">CORS</a>
+                    <a href="#" class="tag">Integration</a>
+                </div>
+
+                <!-- Share Buttons -->
+                <div class="share-buttons">
+                    <span>Share this post:</span>
+                    <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="share-btn facebook"><i class="fab fa-facebook"></i></a>
+                </div>
+
+                <!-- Navigation -->
+                <div class="post-navigation">
+                    <a href="blog-post-5.html" class="nav-link prev">
+                        <span class="nav-label">Previous Post</span>
+                        <span class="nav-title">Building Scalable SaaS Applications with Python</span>
+                    </a>
+                    <a href="index.html#section-blog" class="nav-link next">
+                        <span class="nav-label">Back to</span>
+                        <span class="nav-title">All Blog Posts</span>
+                    </a>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
