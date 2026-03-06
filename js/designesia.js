@@ -2126,8 +2126,8 @@
     });
 
     $(window).on('load', function() {
-        $('#preloader').delay(200).fadeOut(300);
-        jQuery('#content').stop(true).delay(200).animate({
+        $('#preloader').delay(2200).fadeOut(300);
+        jQuery('#content').stop(true).delay(2200).animate({
             'margin-top': "0px"
         }, 500, 'easeOutQuad');
         load_owl();
