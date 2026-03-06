@@ -48,16 +48,16 @@
     <meta property="og:site_name" content="Cyberninja Innovations Limited" />
     <meta property="og:title" content="Divine Amuzie | Full-Stack Developer & Founder – Cyberninja Innovations Limited" />
     <meta property="og:description" content="Full-Stack Developer & Founder of Cyberninja Innovations Limited. Expert in Python, Flask, Django, React.js, MySQL, SaaS, logistics, EdTech & e-commerce. Based in Nigeria, serving clients globally." />
-    <meta property="og:image" content="https://cyberninjainnovations.com/images/background/l11.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://cyberninjainnovations.com/images/fav_icon/logo-square-dark-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
     <meta property="og:locale" content="en_NG" />
 
     <!-- ===== TWITTER CARD ===== -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Divine Amuzie | Full-Stack Developer – Cyberninja Innovations" />
     <meta name="twitter:description" content="Full-Stack Developer & Founder of Cyberninja Innovations Limited. Python, Flask, Django, React.js, SaaS, e-commerce, logistics & EdTech platforms. Nigeria & remote." />
-    <meta name="twitter:image" content="https://cyberninjainnovations.com/images/background/l11.jpg" />
+    <meta name="twitter:image" content="https://cyberninjainnovations.com/images/fav_icon/logo-square-dark-512.png" />
 
     <!-- ===== STRUCTURED DATA (JSON-LD) ===== -->
     <script type="application/ld+json">
@@ -168,30 +168,45 @@
             margin-bottom: 0;
         }
 
-        /* ===== DARK MODE TOGGLE BUTTON ===== */
+        /* ===== DARK MODE TOGGLE — FLOATING RIGHT SIDE ===== */
         #dark-mode-toggle {
-            background: none;
-            border: 2px solid rgba(0,0,0,0.18);
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 9000;
+            background: rgba(255,255,255,0.92);
+            border: 2px solid rgba(0,0,0,0.12);
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
-            transition: border-color 0.3s, color 0.3s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
             padding: 0;
-            flex-shrink: 0;
             color: #333;
         }
-        #dark-mode-toggle:hover { border-color: rgba(0,0,0,0.45); }
+        #dark-mode-toggle:hover {
+            border-color: #f5a623;
+            box-shadow: 0 4px 20px rgba(245,166,35,0.3);
+        }
         #dark-mode-toggle .icon-sun { display: none; }
         #dark-mode-toggle .icon-moon { display: block; }
-        body.dark-mode #dark-mode-toggle { border-color: rgba(255,255,255,0.25); color: #f0f0f0; }
-        body.dark-mode #dark-mode-toggle:hover { border-color: #f5a623; }
+        body.dark-mode #dark-mode-toggle {
+            background: rgba(28,28,28,0.95);
+            border-color: rgba(255,255,255,0.18);
+            color: #f0f0f0;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+        body.dark-mode #dark-mode-toggle:hover { border-color: #f5a623; box-shadow: 0 4px 20px rgba(245,166,35,0.35); }
         body.dark-mode #dark-mode-toggle .icon-sun { display: block; }
         body.dark-mode #dark-mode-toggle .icon-moon { display: none; }
+        @media (max-width: 767px) {
+            #dark-mode-toggle { right: 10px; width: 38px; height: 38px; }
+        }
 
         /* ===== DARK MODE CORE ===== */
         body.dark-mode {
@@ -512,10 +527,26 @@
             .float-text { display: none !important; }
         }
 
-        /* Dark mode toggle: visible & accessible on mobile */
-        @media (max-width: 767px) {
-            #dark-mode-toggle { width: 32px; height: 32px; margin-right: 6px; }
+        /* ===== MOBILE NAVBAR ===== */
+        /* Reduce font size on small screens */
+        @media (max-width: 991px) {
+            header.header-mobile #mainmenu li a { font-size: 15px !important; padding: 10px 16px !important; }
+            header { padding: 0 !important; }
         }
+        /* Ensure hamburger area doesn't overflow */
+        @media (max-width: 767px) {
+            .de-flex { padding: 10px 0; }
+            #logo .logo-text { font-size: 0.9rem !important; }
+            #logo img.logo-icon-default,
+            #logo img.logo-icon-gold { height: 32px !important; }
+        }
+
+        /* ===== LOCATION LIST (Nigeria/USA/UK) — DARK MODE ===== */
+        body.dark-mode .list_location li span {
+            color: #f0f0f0 !important;
+            border-color: rgba(255,255,255,0.35) !important;
+        }
+        body.dark-mode .list_location li { color: #f0f0f0 !important; }
 
         /* Footer: center copyright text on mobile */
         @media (max-width: 767px) {
@@ -590,10 +621,13 @@
             #section-contact .wm-1 { margin-top: 24px; }
         }
 
-        /* Footer: center + stack on mobile */
+        /* Footer: mobile — social icons first (spread), copyright last */
         @media (max-width: 767px) {
-            footer .col-md-6:first-child { text-align: center; margin-bottom: 12px; }
-            footer .social-icons { text-align: center; justify-content: center; display: flex; }
+            footer .row { display: flex; flex-direction: column; align-items: center; }
+            footer .row > div:first-child { order: 2; text-align: center; margin-top: 10px; }
+            footer .row > div:last-child  { order: 1; width: 100%; }
+            footer .social-icons { display: flex; justify-content: space-evenly; width: 100%; padding: 0 10px; }
+            footer .copy { font-size: 0.8rem; }
         }
 
         /* Pricing section */
@@ -850,24 +884,6 @@
                                     <li><a href="#section-contact">Contact Me<span></span></a></li>
                                 </ul>
                                 <div class="menu_side_area" style="display:flex;align-items:center;">
-                                    <button id="dark-mode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
-                                        <!-- Moon icon: shown in light mode -->
-                                        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                                        </svg>
-                                        <!-- Sun icon: shown in dark mode -->
-                                        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="12" cy="12" r="5"/>
-                                            <line x1="12" y1="1" x2="12" y2="3"/>
-                                            <line x1="12" y1="21" x2="12" y2="23"/>
-                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                                            <line x1="1" y1="12" x2="3" y2="12"/>
-                                            <line x1="21" y1="12" x2="23" y2="12"/>
-                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                                        </svg>
-                                    </button>
                                     <span id="menu-btn"></span>
                                 </div>
                             </div>
@@ -877,6 +893,26 @@
             </div>
         </header>
         <!-- header close -->
+
+        <!-- Floating dark mode toggle -->
+        <button id="dark-mode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
+        <!-- Floating dark mode toggle close -->
+
         <!-- content begin -->
         <div class="no-bottom no-top" id="content">
             <div id="top"></div>
