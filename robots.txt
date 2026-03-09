@@ -1,11 +1,8 @@
 User-agent: *
 Allow: /
 
-# Block dev/system folders from indexing
+# Block dev/internal folders only
 Disallow: /vcyber/
-Disallow: /fonts/
-Disallow: /js/
-Disallow: /css/
 
 # Sitemap location
 Sitemap: https://cyberninjainnovations.com/sitemap.xml
