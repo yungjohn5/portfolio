@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confidential Client Project — Cyberninja Innovations</title>
+<meta name="description" content="Project details restricted under a signed NDA. Contact Cyberninja Innovations to discuss.">
+<meta name="robots" content="noindex, follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS
+     Palette pulled from the live Cyberninja Innovations site
+     (theme-color #f5a623, dark hero backgrounds) and extended
+     with a single case-file accent for the confidentiality stamp.
+     ============================================================ */
+
+  .brand{
+        display: inline-flex;
+        align-items: center;   /* vertically centers it against nav text/links */
+        }
+
+        .brand-logo{
+        height: 34px;           /* control size via height, not width */
+        width: auto;            /* keeps aspect ratio locked */
+        display: block;         /* kills the mystery 4px baseline gap under inline images */
+        }
+
+        @media (max-width: 480px){
+        .brand-logo{ height: 28px; } /* slightly smaller on mobile navs */
+        }
+  :root{
+    --bg:            #0a0a0c;
+    --bg-grid:       #101013;
+    --surface:       #131316;
+    --surface-raised:#1b1b1f;
+    --border:        #2a2a2f;
+    --border-soft:   #1f1f24;
+
+    --gold:          #f5a623;
+    --gold-dim:      #c6841a;
+    --gold-wash:     rgba(245,166,35,.08);
+
+    --stamp:         #a23b2e;
+    --stamp-glow:    rgba(162,59,46,.35);
+
+    --text:          #f2f0ea;
+    --text-muted:    #9a9aa2;
+    --text-faint:    #5c5c63;
+
+    --redact:        #050506;
+
+    --font-display:  'Space Grotesk', system-ui, sans-serif;
+    --font-body:     'Inter', system-ui, sans-serif;
+    --font-mono:     'JetBrains Mono', 'Courier New', monospace;
+
+    --radius-card:   14px;
+    --radius-sm:     6px;
+
+    --ease:          cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ color-scheme: dark; }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, var(--gold-wash), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* faint architectural grid, like a blueprint/case-file backdrop */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+      linear-gradient(var(--bg-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 20%, transparent 75%);
+    opacity:.5;
+  }
+
+  a{ color: inherit; }
+
+  :focus-visible{
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ============================================================
+     HEADER — mirrors the main site's nav bar minimally
+     ============================================================ */
+  .site-header{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 16px;
+    padding: 22px clamp(20px, 5vw, 56px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    font-family: var(--font-display);
+    font-weight:600;
+    font-size: 15px;
+    letter-spacing: .01em;
+    color: var(--text);
+  }
+
+  .brand-mark{
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    background: linear-gradient(155deg, var(--surface-raised), var(--bg));
+    border: 1px solid var(--border);
+    display:grid; place-items:center;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration:none;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+  }
+  .back-link:hover{
+    color: var(--gold);
+    border-color: var(--gold-dim);
+    background: var(--gold-wash);
+  }
+  .back-link svg{ width:13px; height:13px; transition: transform .2s var(--ease); }
+  .back-link:hover svg{ transform: translateX(-3px); }
+
+  /* ============================================================
+     MAIN
+     ============================================================ */
+  main{
+    position:relative;
+    z-index:1;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: clamp(32px, 6vw, 64px) 20px;
+  }
+
+  .wrap{
+    width:100%;
+    max-width: 620px;
+  }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+  .eyebrow .file-no{ color: var(--text-muted); }
+
+  /* ---- the case-file card: this is the signature element ---- */
+  .case-file{
+    position:relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: clamp(28px, 5vw, 44px);
+    overflow:hidden;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.03) inset,
+      0 30px 60px -30px rgba(0,0,0,.7);
+    animation: file-settle .5s var(--ease) both;
+  }
+
+  @keyframes file-settle{
+    from{ opacity:0; transform: translateY(10px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /* folder tab */
+  .case-file::before{
+    content: attr(data-tab);
+    position:absolute;
+    top:0; left: 28px;
+    transform: translateY(-100%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    padding: 6px 14px 8px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  /* one-time gold scanner sweep across the card on load */
+  .case-file::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; top:0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    animation: scan 1.1s var(--ease) .15s both;
+    opacity:.9;
+  }
+  @keyframes scan{
+    0%{ top:0; opacity:0; }
+    10%{ opacity:1; }
+    90%{ opacity:1; }
+    100%{ top:100%; opacity:0; }
+  }
+
+  .lock-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom: 22px;
+  }
+  .lock-icon{
+    width:34px; height:34px;
+    border-radius: 8px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    display:grid; place-items:center;
+    color: var(--gold);
+    flex-shrink:0;
+  }
+  .lock-icon svg{ width:16px; height:16px; }
+
+  .status-pill{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color: var(--gold);
+    background: var(--gold-wash);
+    border: 1px solid rgba(245,166,35,.25);
+    padding: 6px 11px;
+    border-radius: 999px;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+  }
+  .status-pill .dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 3px var(--gold-wash);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.35; }
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 30px);
+    font-weight: 600;
+    letter-spacing: -.01em;
+    margin: 0 0 6px;
+  }
+
+  .subhead{
+    color: var(--text-muted);
+    font-size: 14.5px;
+    margin: 0 0 26px;
+    max-width: 46ch;
+  }
+
+  /* redacted title bars — stand in for the project name/description */
+  .redacted{
+    display:flex;
+    flex-direction:column;
+    gap: 9px;
+    margin-bottom: 26px;
+  }
+  .redact-bar{
+    height: 13px;
+    background: var(--redact);
+    border-radius: 3px;
+    position:relative;
+    overflow:hidden;
+  }
+  .redact-bar::after{
+    content:"";
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(
+      115deg,
+      rgba(255,255,255,.02) 0px,
+      rgba(255,255,255,.02) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+  }
+
+  /* meta table — the details that ARE shared */
+  .meta{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 13px;
+    column-gap: 18px;
+    padding: 20px 0;
+    border-top: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 26px;
+  }
+  .meta dt{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .meta dd{
+    margin:0;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 7px;
+  }
+  .chip{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .chip.redacted-chip{
+    background: var(--redact);
+    border-color: var(--redact);
+    color: transparent;
+    min-width: 46px;
+    user-select:none;
+  }
+
+  .notice{
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin: 0 0 30px;
+  }
+  .notice strong{ color: var(--text); font-weight:500; }
+
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 12px;
+  }
+
+  .btn{
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 9px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition: transform .15s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+    border: 1px solid transparent;
+  }
+  .btn:active{ transform: translateY(1px); }
+
+  .btn-primary{
+    background: var(--gold);
+    color: #14100a;
+  }
+  .btn-primary:hover{ background:#ffb945; }
+
+  .btn-ghost{
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover{ border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ---- confidentiality stamp ---- */
+  .stamp{
+    position:absolute;
+    top: 34px;
+    right: -10px;
+    transform: rotate(9deg);
+    font-family: var(--font-display);
+    font-weight:700;
+    font-size: 15px;
+    letter-spacing: .12em;
+    color: var(--stamp);
+    border: 2.5px solid var(--stamp);
+    border-radius: 6px;
+    padding: 7px 14px;
+    text-transform:uppercase;
+    text-shadow: 0 0 1px var(--stamp-glow);
+    box-shadow: 0 0 0 1px rgba(162,59,46,.15) inset;
+    opacity:.9;
+    animation: stamp-down .45s var(--ease) .5s both;
+    pointer-events:none;
+  }
+  .stamp::before{
+    /* worn/distressed edge, faked with a dashed inner rule */
+    content:"";
+    position:absolute; inset: 3px;
+    border: 1px dashed rgba(162,59,46,.5);
+    border-radius: 3px;
+  }
+  @keyframes stamp-down{
+    0%{ opacity:0; transform: rotate(9deg) scale(1.8); }
+    60%{ opacity:1; }
+    100%{ opacity:.9; transform: rotate(9deg) scale(1); }
+  }
+
+  @media (max-width: 480px){
+    .stamp{ font-size: 12px; right: 12px; top: -14px; padding:5px 10px; }
+    .meta{ grid-template-columns: 1fr; row-gap: 16px; }
+    .meta dd{ margin-top: 2px; }
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding: 22px 20px 30px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    letter-spacing: .03em;
+  }
+  footer a{ color: var(--text-muted); text-decoration:none; }
+  footer a:hover{ color: var(--gold); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="https://cyberninjainnovations.com/">
+    <img src="images/fav_icon/logo-square-gold-512.png" alt="Divine Amuzie | Full-Stack Developer & Founder – Cyberninja Innovations Limited" class="brand-logo">
+    Cyberninja Innovations
+  </a>
+  <a class="back-link" href="https://cyberninjainnovations.com/section-portfolio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to portfolio
+  </a>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="eyebrow">
+      <span>Client Project File</span>
+      <span class="file-no" id="fileNo">FILE&nbsp;NO. —</span>
+    </div>
+
+    <article class="case-file" data-tab="Restricted">
+
+      <span class="stamp" aria-hidden="true">Confidential</span>
+
+      <div class="lock-row">
+        <span class="lock-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          </svg>
+        </span>
+        <span class="status-pill"><span class="dot"></span> Under active NDA</span>
+      </div>
+
+      <h1>Confidential Client Project</h1>
+      <p class="subhead">
+        This build is currently protected under a signed non-disclosure agreement.
+        The project name, live URL, and screenshots can't be shown publicly —
+        here's what I can share.
+      </p>
+
+      <div class="redacted" aria-hidden="true">
+        <div class="redact-bar" style="width:78%"></div>
+        <div class="redact-bar" style="width:52%"></div>
+        <div class="redact-bar" style="width:64%"></div>
+      </div>
+
+      <dl class="meta" id="metaList">
+        <!-- populated from PROJECT config below -->
+      </dl>
+
+      <p class="notice">
+        <strong>Want the real story?</strong> I can walk you through the architecture,
+        the problems it solved, and my role on a call — anything not covered by the NDA
+        is fair game to discuss directly.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn-primary" id="ctaEmail" href="#">
+          Discuss this project
+        </a>
+        <a class="btn btn-ghost" href="https://cyberninjainnovations.com/#section-portfolio">
+          View public projects
+        </a>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer>
+  © <span id="year"></span> Cyberninja Innovations Limited · Project details withheld per client NDA
+</footer>
+
+<script>
+  /* ==================================================================
+     PROJECT CONFIG
+     ------------------------------------------------------------------
+     Duplicate this HTML file per NDA'd project and only edit the
+     values below — everything in the page renders off this object,
+     so no need to touch the markup/CSS for a new case file.
+
+     Only fill in what your NDA actually allows you to disclose.
+     Leave a field as an empty string "" to omit that row entirely.
+     ================================================================== */
+  const PROJECT = {
+    fileNo:      "CNI-2026-014",   // internal reference shown top-right, purely cosmetic
+    industry:    "Fintech",        // e.g. "Fintech", "Logistics", "EdTech", "E-commerce"
+    role:        "Lead Full-Stack Developer",
+    engagement:  "Client engagement · 2025 – Present",
+    teamSize:    "Team of 3 developers",
+    stackVisible:   ["Django", "PostgreSQL", "React"], // techs you're cleared to name
+    stackRedactedCount: 2,          // extra "hidden" chips rendered as solid blocks
+    contactEmail: "divine@cyberninjainnovations.com",
+    contactSubject: "Confidential project — let's talk"
+  };
+
+  // ---- render meta rows ----
+  const metaRows = [
+    ["Industry", PROJECT.industry],
+    ["My role", PROJECT.role],
+    ["Engagement", PROJECT.engagement],
+    ["Team", PROJECT.teamSize],
+  ].filter(([, value]) => value);
+
+  const metaList = document.getElementById("metaList");
+  metaRows.forEach(([label, value]) => {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    metaList.append(dt, dd);
+  });
+
+  // stack row (rendered as chips, mixing visible + redacted)
+  if (PROJECT.stackVisible.length || PROJECT.stackRedactedCount) {
+    const dt = document.createElement("dt");
+    dt.textContent = "Stack";
+    const dd = document.createElement("dd");
+    const chipWrap = document.createElement("div");
+    chipWrap.className = "chips";
+
+    PROJECT.stackVisible.forEach(tech => {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = tech;
+      chipWrap.append(chip);
+    });
+
+    for (let i = 0; i < PROJECT.stackRedactedCount; i++) {
+      const chip = document.createElement("span");
+      chip.className = "chip redacted-chip";
+      chip.textContent = "████";
+      chipWrap.append(chip);
+    }
+
+    dd.append(chipWrap);
+    metaList.append(dt, dd);
+  }
+
+  // ---- file number, year, mailto ----
+  document.getElementById("fileNo").textContent = "FILE NO. " + PROJECT.fileNo;
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const cta = document.getElementById("ctaEmail");
+  cta.href = `mailto:${PROJECT.contactEmail}?subject=${encodeURIComponent(PROJECT.contactSubject)}`;
+</script>
+
+</body>
+</html>

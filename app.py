@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__, static_folder=".", static_url_path="")
+app = Flask(__name__, static_folder="static", static_url_path="")
 
 resend.api_key = os.environ["RESEND_API_KEY"]
 RECIPIENT_EMAIL = os.environ["RECIPIENT_EMAIL"]
@@ -28,13 +28,13 @@ def verify_recaptcha(token):
 
 @app.route("/")
 def index():
-    return send_from_directory(".", "index-grey.html")
+    return send_from_directory(app.static_folder, "index-grey.html")
 
 
 
 @app.route("/resume/download")
 def resume_download():
-    return send_file("resume/Divine_amuzie.pdf",
+    return send_from_directory(app.static_folder + "/resume", "Divine_amuzie.pdf",
                      as_attachment=True,
                      download_name="Divine_amuzie.pdf")
 
